@@ -1,7 +1,6 @@
 ## Requirements for Setup
 
 - Node.js
-- npm (Node Package Manager)
 - PostgreSQL
 
 ## Installation
