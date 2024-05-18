@@ -14,8 +14,8 @@
    npx nodemon backend.js
    ```
 
-2. **Run Postgresql Server**
-3. **Setup Postgresql config**
+2. **Run PostgreSQL Server**
+3. **Setup PostgreSQL Config**
 
 ## Requirement 1 Implementation
 
