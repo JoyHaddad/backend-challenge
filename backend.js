@@ -12,7 +12,7 @@ db.Post.belongsTo(db.User);
 
 const { Sequelize } = require("sequelize");
 const controller = require("./controller/file.controller");
-app.post("/v1/createPost", controller.upload);
+app.post("/v1/createPost", controller.createPost);
 
 const sequelize = new Sequelize("backenddb", "postgres", "scott325", {
   host: "localhost",
@@ -71,8 +71,8 @@ const sequelize = new Sequelize("backenddb", "postgres", "scott325", {
       }
     });
 
-    // Upload post route
-    exports.upload = async (req, res) => {
+    // Create Post post route
+    exports.createPost = async (req, res) => {
       const { description, image: imageUrl } = req.query; // Assuming image should be imageUrl
       if (!description || !imageUrl) {
         res.status(400).send("Missing required parameters");
@@ -93,7 +93,7 @@ const sequelize = new Sequelize("backenddb", "postgres", "scott325", {
           return;
         }
 
-        await user.upload({
+        await user.createPost({
           description,
           imageUrl,
         });

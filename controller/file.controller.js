@@ -5,7 +5,7 @@ const { Storage } = require("@google-cloud/storage");
 const storage = new Storage({ keyFilename: "google-cloud-key.json" });
 const bucket = storage.bucket("backend-challenge-bucket");
 
-const upload = async (req, res) => {
+const createPost = async (req, res) => {
   try {
     await processFile(req, res);
 
@@ -94,7 +94,7 @@ const download = async (req, res) => {
 };
 
 module.exports = {
-  upload,
+  createPost,
   getListFiles,
   download,
 };
