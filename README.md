@@ -36,6 +36,18 @@
 
 ## Requirement 2 Implementation
 
+- Made it so that a user can post up to 5 images, storing the URL of images into the database seperated by comma
+- Created a Patch request so that the user can update their post description based on the post id
+- Used moment.js package to return how long ago the post was created
+- Made a get request to return each post and when they were created
+
+## Requirement 3 Implementation
+
+- Added pagination by creating a limit for posts loading on each page
+- Create a many to many friends realtionship table in models so that users can add eachother as friends
+- made a Get request to get list of all friends and their respective email, username and mutual friends count
+- For mutual friends, get the IDs of the current friend's friends and filter to only include mutual friends
+
 ## ER Diagram for Backend Challenge
 
 ![backend-challenge](https://storage.googleapis.com/backend-challenge-bucket/Backend%20Challenge%20ER.jpg)
