@@ -6,6 +6,7 @@ const port = 8000;
 
 const userRoute = require("./routes/user");
 const postRoute = require("./routes/post");
+const friendRoute = require("./routes/friend");
 
 const db = require("./models");
 
@@ -27,6 +28,7 @@ const sequelize = new Sequelize(
 
     app.use("/user", userRoute);
     app.use("/post", postRoute);
+    app.use("/friend", friendRoute);
 
     db.sequelize.sync().then(() => {
       app.listen(port, () => {

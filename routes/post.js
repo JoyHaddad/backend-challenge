@@ -27,6 +27,12 @@ router.post("/", userAuth, upload.array("images", 5), async (req, res) => {
     return;
   }
 
+  if (files.length > 5) {
+    // Limit the number of images to 5
+    res.status(400).send("Maximum of 5 images allowed");
+    return;
+  }
+
   try {
     const imageUrls = [];
     // Upload files to Google Cloud Storage
@@ -73,7 +79,12 @@ router.post("/", userAuth, upload.array("images", 5), async (req, res) => {
   }
 });
 
-router.get("/posts", async (req, res) => {
+// Get all posts
+router.get("/", async (req, res) => {
+  // Get pagination parameters from query, with default values
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 5;
+  const offset = (page - 1) * limit;
   try {
     const posts = await db.Post.findAll({
       include: [
@@ -84,6 +95,8 @@ router.get("/posts", async (req, res) => {
       ],
       attributes: ["id", "description", "createdAt"], // Specify only the necessary attributes
       order: [["createdAt", "DESC"]], // Order by date in descending order
+      limit,
+      offset,
     });
 
     const results = posts.map((post) => ({
@@ -100,7 +113,7 @@ router.get("/posts", async (req, res) => {
   }
 });
 
-//edit description
+// Edit description
 router.patch("/:postId", userAuth, async (req, res) => {
   const { description } = req.query;
   const { postId } = req.params;
