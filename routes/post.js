@@ -16,6 +16,8 @@ const bucketName = process.env.BUCKET_NAME;
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
+const moment = require("moment");
+
 router.post("/", userAuth, upload.array("images", 5), async (req, res) => {
   const { description } = req.query;
   const files = req.files;
@@ -68,6 +70,67 @@ router.post("/", userAuth, upload.array("images", 5), async (req, res) => {
   } catch (error) {
     console.error("Error creating post:", error);
     res.status(500).send("Error creating post");
+  }
+});
+
+router.get("/posts", async (req, res) => {
+  try {
+    const posts = await db.Post.findAll({
+      include: [
+        {
+          model: db.User,
+          attributes: ["username"], // Assuming you want to include the username of the poster
+        },
+      ],
+      attributes: ["id", "description", "createdAt"], // Specify only the necessary attributes
+      order: [["createdAt", "DESC"]], // Order by date in descending order
+    });
+
+    const results = posts.map((post) => ({
+      id: post.id,
+      description: post.description,
+      postedTime: moment(post.createdAt).fromNow(), // Format createdAt to a relative time
+      username: post.User.username, // Include username from the User association
+    }));
+
+    res.json(results);
+  } catch (error) {
+    console.error("Error retrieving posts:", error);
+    res.status(500).send("Error retrieving posts");
+  }
+});
+
+//edit description
+router.patch("/:postId", userAuth, async (req, res) => {
+  const { description } = req.query;
+  const { postId } = req.params;
+
+  if (!description) {
+    res.status(400).send("Description is required");
+    return;
+  }
+
+  try {
+    const post = await db.Post.findByPk(postId);
+
+    if (!post) {
+      res.status(404).send("Post not found");
+      return;
+    }
+
+    // Check if the authenticated user is the owner of the post
+    if (post.UserId !== req.userId) {
+      res.status(403).send("Unauthorized to edit this post");
+      return;
+    }
+
+    post.description = description;
+    await post.save();
+
+    res.send("Post description updated successfully");
+  } catch (error) {
+    console.error("Error updating post:", error);
+    res.status(500).send("Error updating post");
   }
 });
 

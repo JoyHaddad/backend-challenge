@@ -31,8 +31,10 @@
 - Sent userId as a foreign key to the posts create by their corresponding user
 - Created GCP bucket in order to store images uploaded from the user's posts
 - Generated a cloud key in json format to access the bucket
-- Added middleware to process the images before uploading them to GCP
-- Added file.controller to exports Rest APIs and upload the images
+- Added middleware to authenticate user before they sign in or create a post
+- Created routes folder to better organize API requests and make code more readable
+
+## Requirement 2 Implementation
 
 ## ER Diagram for Backend Challenge
 
